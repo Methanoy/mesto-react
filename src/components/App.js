@@ -16,6 +16,28 @@ function App() {
   const handleEditProfileClick = () => { setEditProfilePopupOpen(true) };
   const handleAddPlaceClick = () => { setAddPlacePopupOpen(true) };
 
+  const closeAllPopups = () => { setEditAvatarPopupOpen(false) || setEditProfilePopupOpen(false) || setAddPlacePopupOpen(false) };
+
+  React.useEffect(() => {
+    function handleEscClose(evt) {
+      if(evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    }
+    document.addEventListener('keydown', handleEscClose);
+    return () => document.removeEventListener('keydown', handleEscClose);
+  }, []);
+  
+  React.useEffect(() => {
+    function handleOutsideClickClose(evt) {
+      if (evt.target.classList.contains('popup_opened')) {
+        closeAllPopups();
+      }
+    }
+    document.addEventListener('mousedown', handleOutsideClickClose);
+    return () => document.removeEventListener('mousedown', handleOutsideClickClose);
+  }, []);
+
   return (
     <div className="page">
 
@@ -23,7 +45,7 @@ function App() {
       <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} />
       <Footer />
       <ImagePopup />
-      <PopupWithForm name="avatar" buttonText="Сохранить" titleText="Обновить аватар" isOpen={isEditAvatarPopupOpen} children={
+      <PopupWithForm name="avatar" buttonText="Сохранить" titleText="Обновить аватар" isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} children={
         <>
           <input 
           id="avatar-input"
@@ -37,7 +59,7 @@ function App() {
         </>
       } />
 
-      <PopupWithForm name="profile" buttonText="Сохранить" titleText="Редкатировать профиль" isOpen={isEditProfilePopupOpen} children={
+      <PopupWithForm name="profile" buttonText="Сохранить" titleText="Редкатировать профиль" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} children={
         <>
           <input
           id="name-input" 
@@ -63,7 +85,7 @@ function App() {
         </>
       } />
 
-      <PopupWithForm name="cards" buttonText="Создать" titleText="Новое место" isOpen={isAddPlacePopupOpen} children={
+      <PopupWithForm name="cards" buttonText="Создать" titleText="Новое место" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} children={
         <>
           <input 
           id="cardname-input"
