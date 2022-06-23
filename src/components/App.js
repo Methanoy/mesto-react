@@ -4,16 +4,26 @@ import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import React from 'react';
 
 function App() {
+
+  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
+  const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
+  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
+
+  const handleEditAvatarClick = () => { setEditAvatarPopupOpen(true) };
+  const handleEditProfileClick = () => { setEditProfilePopupOpen(true) };
+  const handleAddPlaceClick = () => { setAddPlacePopupOpen(true) };
+
   return (
     <div className="page">
 
       <Header />
-      <Main />
+      <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} />
       <Footer />
       <ImagePopup />
-      <PopupWithForm name="avatar" buttonText="Сохранить" titleText="Обновить аватар" children={
+      <PopupWithForm name="avatar" buttonText="Сохранить" titleText="Обновить аватар" isOpen={isEditAvatarPopupOpen} children={
         <>
           <input 
           id="avatar-input"
@@ -27,7 +37,7 @@ function App() {
         </>
       } />
 
-      <PopupWithForm name="profile" buttonText="Сохранить" titleText="Редкатировать профиль" children={
+      <PopupWithForm name="profile" buttonText="Сохранить" titleText="Редкатировать профиль" isOpen={isEditProfilePopupOpen} children={
         <>
           <input
           id="name-input" 
@@ -53,7 +63,7 @@ function App() {
         </>
       } />
 
-      <PopupWithForm name="cards" buttonText="Создать" titleText="Новое место" children={
+      <PopupWithForm name="cards" buttonText="Создать" titleText="Новое место" isOpen={isAddPlacePopupOpen} children={
         <>
           <input 
           id="cardname-input"
