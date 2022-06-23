@@ -3,6 +3,7 @@ import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
+import ImagePopup from './ImagePopup';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Header />
       <Main />
       <Footer />
+      <ImagePopup />
       <PopupWithForm name="avatar" buttonText="Сохранить" titleText="Обновить аватар" children={
         <>
           <input 
@@ -94,14 +96,6 @@ function App() {
             </div>
         </li>
     </template>
-
-    <div className="popup popup_zoom">
-        <div className="popup__container popup__container_zoom">
-            <img className="popup__zoom-image" src="#" alt="#" />
-            <h3 className="popup__title popup__title_zoom">#</h3>
-            <button className="popup__close-button" aria-label="Закрыть" type="button"></button>
-        </div>
-    </div>
 
     </div>
   );
