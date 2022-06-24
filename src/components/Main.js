@@ -1,7 +1,7 @@
 import avatarLoading from '../images/avatar_loading.jpeg';
 import api from '../utils/api.js';
 import React from 'react';
-import Cards from './Cards.js';
+import Card from './Card.js';
 
 function Main(props) {
     const [userName, setUserName] = React.useState('Загрузка...');
@@ -48,7 +48,7 @@ function Main(props) {
         <section className="elements">
             <ul className="cards">
                 {cardsArr.map((element) => (
-                    <Cards cardData={element} key={element._id}/>
+                    <Card cardData={element} key={element._id} onCardClick={props.onCardClick}/>
                 ))}
             </ul>
         </section>

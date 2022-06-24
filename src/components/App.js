@@ -12,12 +12,20 @@ function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
+  const [isImagePopupOpen, setImagePopupOpen] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState({});
 
   const handleEditAvatarClick = () => { setEditAvatarPopupOpen(true) };
   const handleEditProfileClick = () => { setEditProfilePopupOpen(true) };
   const handleAddPlaceClick = () => { setAddPlacePopupOpen(true) };
+  
+const handleCardClick = (card) => {
+    setSelectedCard(card);
+    setImagePopupOpen(true); 
+  };
 
-  const closeAllPopups = () => { setEditAvatarPopupOpen(false) || setEditProfilePopupOpen(false) || setAddPlacePopupOpen(false) };
+  
+  const closeAllPopups = () => { setEditAvatarPopupOpen(false) || setEditProfilePopupOpen(false) || setAddPlacePopupOpen(false) || setImagePopupOpen(false)};
 
   React.useEffect(() => {
     function handleEscClose(evt) {
@@ -43,9 +51,9 @@ function App() {
     <div className="page">
 
       <Header />
-      <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} />
+      <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick}/>
       <Footer />
-      <ImagePopup />
+      <ImagePopup card={selectedCard} isOpen={isImagePopupOpen} onClose={closeAllPopups} />
       <PopupWithForm name="avatar" buttonText="Сохранить" titleText="Обновить аватар" isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} children={
         <>
           <input 
@@ -65,7 +73,8 @@ function App() {
           <input
           id="name-input" 
           className="popup__input popup__input_name" 
-          type="text" 
+          type="text"
+          placeholder="ФИО" 
           name="name"
           minLength="2"
           maxLength="40"
@@ -76,7 +85,8 @@ function App() {
           <input
           id="occupation-input" 
           className="popup__input popup__input_occupation" 
-          type="text" 
+          type="text"
+          placeholder="Профессия" 
           name="about"
           minLength="2"
           maxLength="200"
@@ -113,10 +123,6 @@ function App() {
       } />
 
       <PopupWithForm name="confirmation" buttonText="Да" titleText="Вы уверены?" />
-
-      <template id="cards-template">
-
-      </template>
 
     </div>
   );
