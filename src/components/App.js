@@ -6,6 +6,7 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import React from 'react';
 
+
 function App() {
 
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
@@ -114,20 +115,8 @@ function App() {
       <PopupWithForm name="confirmation" buttonText="Да" titleText="Вы уверены?" />
 
       <template id="cards-template">
-        <li className="cards__element">
-            <div className="card">
-                <img className="card__photo" src="#" alt="#" />
-                <button className="card__del" aria-label="Удалить карточку" type="button"></button> 
-                <div className="card__caption-zone">
-                    <h2 className="card__caption">#</h2>
-                    <div className="card__like-zone">
-                        <button className="card__like" aria-label="" type="button"></button>
-                        <span className="card__like-counter">0</span>
-                    </div>
-                </div>
-            </div>
-        </li>
-    </template>
+
+      </template>
 
     </div>
   );
