@@ -5,6 +5,8 @@
     margin-right: 30px;
     object-fit: cover;
     transition: opacity 1s ease 0s;
+    position: relative;
+    z-index: -1;
 }
 
 @media screen and (max-width: 899px) {
