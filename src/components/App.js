@@ -9,23 +9,23 @@ import React from 'react';
 
 function App() {
 
-  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
-  const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
-  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
-  const [isImagePopupOpen, setImagePopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({});
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
+  const [selectedCard, setIsSelectedCard] = React.useState({});
 
-  const handleEditAvatarClick = () => { setEditAvatarPopupOpen(true) };
-  const handleEditProfileClick = () => { setEditProfilePopupOpen(true) };
-  const handleAddPlaceClick = () => { setAddPlacePopupOpen(true) };
+  const handleEditAvatarClick = () => { setIsEditAvatarPopupOpen(true) };
+  const handleEditProfileClick = () => { setIsEditProfilePopupOpen(true) };
+  const handleAddPlaceClick = () => { setIsAddPlacePopupOpen(true) };
   
 const handleCardClick = (card) => {
-    setSelectedCard(card);
-    setImagePopupOpen(true); 
+    setIsSelectedCard(card);
+    setIsImagePopupOpen(true); 
   };
 
   
-  const closeAllPopups = () => { setEditAvatarPopupOpen(false) || setEditProfilePopupOpen(false) || setAddPlacePopupOpen(false) || setImagePopupOpen(false)};
+  const closeAllPopups = () => { setIsEditAvatarPopupOpen(false) || setIsEditProfilePopupOpen(false) || setIsAddPlacePopupOpen(false) || setIsImagePopupOpen(false)};
 
   React.useEffect(() => {
     function handleEscClose(evt) {
@@ -68,8 +68,8 @@ const handleCardClick = (card) => {
         </>
       } />
 
-      <PopupWithForm name="profile" buttonText="Сохранить" titleText="Редкатировать профиль" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} children={
-        <>
+      <PopupWithForm name="profile" buttonText="Сохранить" titleText="Редкатировать профиль" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}>
+
           <input
           id="name-input" 
           className="popup__input popup__input_name" 
@@ -93,11 +93,11 @@ const handleCardClick = (card) => {
           autoComplete="off"
           required />
           <span className="occupation-input-error popup__input-error"></span>
-        </>
-      } />
 
-      <PopupWithForm name="cards" buttonText="Создать" titleText="Новое место" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} children={
-        <>
+      </PopupWithForm>
+
+      <PopupWithForm name="cards" buttonText="Создать" titleText="Новое место" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}>
+
           <input 
           id="cardname-input"
           className="popup__input popup__input_cardname" 
@@ -119,8 +119,8 @@ const handleCardClick = (card) => {
           autoComplete="off"
           required />
           <span className="link-input-error popup__input-error"></span>
-        </>
-      } />
+          
+      </PopupWithForm>
 
       <PopupWithForm name="confirmation" buttonText="Да" titleText="Вы уверены?" />
 
