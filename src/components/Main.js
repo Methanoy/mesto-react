@@ -1,34 +1,27 @@
-import avatarLoading from "../images/avatar_loading.jpeg";
-import api from "../utils/api.js";
 import React from "react";
 import Card from "./Card.js";
+import api from "../utils/api.js";
+import { CurrentUserContext } from "./contexts/CurrentUserContext";
 
 function Main(props) {
-  const [userName, setUserName] = React.useState("Загрузка...");
-  const [userDescription, setUserDescription] = React.useState("");
-  const [userAvatar, setUserAvatar] = React.useState(avatarLoading);
-  const [cardsArr, setCardsArr] = React.useState([]);
+  const currentUser = React.useContext(CurrentUserContext);
+  const [cards, setCards] = React.useState([]);
 
-  React.useEffect(() => {
+  function handleCardLike(card) {
+    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+
     api
-      .getInitialUserData()
-      .then((userData) => {
-        setUserAvatar(userData.avatar);
-        setUserName(userData.name);
-        setUserDescription(userData.about);
-      })
-      .catch((err) =>
-        console.log(
-          `Ошибка при получении первоначальных данных профиля с сервера: ${err}`
-        )
-      );
-  }, []);
+      .changeCardLikeStatus(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+    });
+  }
 
   React.useEffect(() => {
     api
       .getInitialCardsData()
-      .then((data) => {
-        setCardsArr(data);
+      .then((cardsArr) => {
+        setCards(cardsArr);
       })
       .catch((err) =>
         console.log(
@@ -42,24 +35,28 @@ function Main(props) {
       <section className="profile">
         <button
           className="profile__avatar-button"
-          aria-label="Редактировать аватар"
+          aria-label="Редактировать аватар."
           onClick={props.onEditAvatar}
         >
-          <img className="profile__avatar" src={userAvatar} alt="Ваш аватар." />
+          <img
+            className="profile__avatar"
+            src={currentUser.avatar}
+            alt="Ваш аватар."
+          />
         </button>
         <div className="profile__info">
-          <h1 className="profile__name">{userName}</h1>
-          <p className="profile__occupation">{userDescription}</p>
+          <h1 className="profile__name">{currentUser.name}</h1>
+          <p className="profile__occupation">{currentUser.about}</p>
           <button
             className="profile__edit-button"
-            aria-label="Редактировать данные профиля"
+            aria-label="Редактировать данные профиля."
             type="button"
             onClick={props.onEditProfile}
           ></button>
         </div>
         <button
           className="profile__add-button"
-          aria-label="Добавить картинку"
+          aria-label="Добавить картинку."
           type="button"
           onClick={props.onAddPlace}
         ></button>
@@ -67,11 +64,12 @@ function Main(props) {
 
       <section className="elements">
         <ul className="cards">
-          {cardsArr.map((element) => (
+          {cards.map((element) => (
             <Card
-              cardData={element}
+              card={element}
               key={element._id}
               onCardClick={props.onCardClick}
+              onCardLike={handleCardLike}
             />
           ))}
         </ul>
