@@ -1,0 +1,74 @@
+import React from "react";
+import PopupWithForm from "./PopupWithForm";
+import { CurrentUserContext } from "./contexts/CurrentUserContext";
+
+function EditProfilePopup(props) {
+  const currentUser = React.useContext(CurrentUserContext);
+  const [name, setName] = React.useState("");
+  const [description, setDescription] = React.useState("");
+
+  function handleChangeName(evt) {
+    setName(evt.target.value);
+  }
+
+  function handleChangeDescription(evt) {
+    setDescription(evt.target.value);
+  }
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+
+    props.onUpdateUser({
+      name,
+      about: description,
+    });
+  }
+
+  React.useEffect(() => {
+    setName(currentUser.name);
+    setDescription(currentUser.about);
+  }, [currentUser]);
+
+  return (
+    <PopupWithForm
+      name="profile"
+      buttonText="Сохранить"
+      titleText="Редкатировать профиль"
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+      onSubmit={handleSubmit}
+    >
+      <input
+        id="name-input"
+        className="popup__input popup__input_name"
+        type="text"
+        placeholder="ФИО"
+        name="name"
+        minLength="2"
+        maxLength="40"
+        autoComplete="off"
+        value={name || ""}
+        onChange={handleChangeName}
+        required
+      />
+      <span className="name-input-error popup__input-error"></span>
+
+      <input
+        id="occupation-input"
+        className="popup__input popup__input_occupation"
+        type="text"
+        placeholder="Профессия"
+        name="about"
+        minLength="2"
+        maxLength="200"
+        autoComplete="off"
+        value={description || ""}
+        onChange={handleChangeDescription}
+        required
+      />
+      <span className="occupation-input-error popup__input-error"></span>
+    </PopupWithForm>
+  );
+}
+
+export default EditProfilePopup;

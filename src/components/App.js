@@ -3,6 +3,7 @@ import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
+import EditProfilePopup from "./EditProfilePopup";
 import ImagePopup from "./ImagePopup";
 import React from "react";
 import api from "../utils/api.js";
@@ -18,6 +19,36 @@ function App() {
   const [selectedCard, setIsSelectedCard] = React.useState({});
   const [currentUser, setIsCurrentUser] = React.useState({});
 
+  const handleEditAvatarClick = () => setIsEditAvatarPopupOpen(true);
+  const handleEditProfileClick = () => setIsEditProfilePopupOpen(true);
+  const handleAddPlaceClick = () => setIsAddPlacePopupOpen(true);
+
+  const handleCardClick = (card) => {
+    setIsSelectedCard(card);
+    setIsImagePopupOpen(true);
+  };
+
+  const closeAllPopups = () => {
+    setIsEditAvatarPopupOpen(false) ||
+      setIsEditProfilePopupOpen(false) ||
+      setIsAddPlacePopupOpen(false) ||
+      setIsImagePopupOpen(false);
+  };
+
+  function handleUpdateUser(data) {
+    api
+      .editUserInfo(data)
+      .then((userData) => {
+        setIsCurrentUser(userData);
+        closeAllPopups();
+      })
+      .catch((err) =>
+        console.log(
+          `Ошибка при редактировании данных пользователя: ${err}`
+        )
+      );
+  }
+
   React.useEffect(() => {
     api
       .getInitialUserData()
@@ -30,27 +61,6 @@ function App() {
         )
       );
   }, []);
-
-  const handleEditAvatarClick = () => {
-    setIsEditAvatarPopupOpen(true);
-  };
-  const handleEditProfileClick = () => {
-    setIsEditProfilePopupOpen(true);
-  };
-  const handleAddPlaceClick = () => {
-    setIsAddPlacePopupOpen(true);
-  };
-  const handleCardClick = (card) => {
-    setIsSelectedCard(card);
-    setIsImagePopupOpen(true);
-  };
-
-  const closeAllPopups = () => {
-    setIsEditAvatarPopupOpen(false) ||
-      setIsEditProfilePopupOpen(false) ||
-      setIsAddPlacePopupOpen(false) ||
-      setIsImagePopupOpen(false);
-  };
 
   React.useEffect(() => {
     function handleEscClose(evt) {
@@ -111,39 +121,11 @@ function App() {
           }
         />
 
-        <PopupWithForm
-          name="profile"
-          buttonText="Сохранить"
-          titleText="Редкатировать профиль"
+        <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
-        >
-          <input
-            id="name-input"
-            className="popup__input popup__input_name"
-            type="text"
-            placeholder="ФИО"
-            name="name"
-            minLength="2"
-            maxLength="40"
-            autoComplete="off"
-            required
-          />
-          <span className="name-input-error popup__input-error"></span>
-
-          <input
-            id="occupation-input"
-            className="popup__input popup__input_occupation"
-            type="text"
-            placeholder="Профессия"
-            name="about"
-            minLength="2"
-            maxLength="200"
-            autoComplete="off"
-            required
-          />
-          <span className="occupation-input-error popup__input-error"></span>
-        </PopupWithForm>
+          onUpdateUser={handleUpdateUser}
+        ></EditProfilePopup>
 
         <PopupWithForm
           name="cards"
