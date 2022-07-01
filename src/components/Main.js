@@ -17,6 +17,15 @@ function Main(props) {
     });
   }
 
+  function handleCardDelete(card) {
+    
+    api
+    .deleteCard(card._id)
+    .then((delCard) => {
+      setCards((state) => state.filter((c) => (c._id === card._id ? !delCard : c)));
+    });
+  }
+
   React.useEffect(() => {
     api
       .getInitialCardsData()
@@ -70,6 +79,7 @@ function Main(props) {
               key={element._id}
               onCardClick={props.onCardClick}
               onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
             />
           ))}
         </ul>
