@@ -5,19 +5,20 @@ import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import EditProfilePopup from "./EditProfilePopup";
 import ImagePopup from "./ImagePopup";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import api from "../utils/api.js";
 import { CurrentUserContext } from "./contexts/CurrentUserContext";
+import EditAvatarPopup from "./EditAvatarPopup";
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
+    useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
-  const [selectedCard, setIsSelectedCard] = React.useState({});
-  const [currentUser, setIsCurrentUser] = React.useState({});
+    useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [selectedCard, setIsSelectedCard] = useState({});
+  const [currentUser, setIsCurrentUser] = useState({});
 
   const handleEditAvatarClick = () => setIsEditAvatarPopupOpen(true);
   const handleEditProfileClick = () => setIsEditProfilePopupOpen(true);
@@ -43,13 +44,23 @@ function App() {
         closeAllPopups();
       })
       .catch((err) =>
-        console.log(
-          `Ошибка при редактировании данных пользователя: ${err}`
-        )
+        console.log(`Ошибка при редактировании данных пользователя: ${err}`)
       );
   }
 
-  React.useEffect(() => {
+  function handleUpdateAvatar(data) {
+    api
+      .editUserAvatar(data)
+      .then((userData) => {
+        setIsCurrentUser(userData);
+        closeAllPopups();
+      })
+      .catch((err) =>
+        console.log(`Ошибка при редактировании данных аватара: ${err}`)
+      );
+  }
+
+  useEffect(() => {
     api
       .getInitialUserData()
       .then((userData) => {
@@ -62,7 +73,7 @@ function App() {
       );
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     function handleEscClose(evt) {
       if (evt.key === "Escape") {
         closeAllPopups();
@@ -72,7 +83,7 @@ function App() {
     return () => document.removeEventListener("keydown", handleEscClose);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     function handleOutsideClickClose(evt) {
       if (evt.target.classList.contains("popup_opened")) {
         closeAllPopups();
@@ -99,27 +110,11 @@ function App() {
           isOpen={isImagePopupOpen}
           onClose={closeAllPopups}
         />
-        <PopupWithForm
-          name="avatar"
-          buttonText="Сохранить"
-          titleText="Обновить аватар"
+        <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
-          children={
-            <>
-              <input
-                id="avatar-input"
-                className="popup__input popup__input_avatar"
-                type="url"
-                name="avatar"
-                placeholder="Ссылка на аватар"
-                autoComplete="off"
-                required
-              />
-              <span className="avatar-input-error popup__input-error"></span>
-            </>
-          }
-        />
+          onUpdateAvatar={handleUpdateAvatar}
+        ></EditAvatarPopup>
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
