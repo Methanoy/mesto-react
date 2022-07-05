@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import Card from "./Card.js";
 import { CurrentUserContext } from "./contexts/CurrentUserContext";
 
-function Main(onCardClick, onCardLike, onCardDelete, ...props) {
+function Main(props) {
   const currentUser = useContext(CurrentUserContext);
 
   return (
@@ -43,9 +43,9 @@ function Main(onCardClick, onCardLike, onCardDelete, ...props) {
             <Card
               card={element}
               key={element._id}
-              onCardClick={onCardClick}
-              onCardLike={onCardLike}
-              onCardDelete={onCardDelete}
+              onCardClick={props.onCardClick}
+              onCardLike={props.onCardLike}
+              onCardDelete={props.onCardDelete}
             />
           ))}
         </ul>
