@@ -4,6 +4,7 @@ import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import EditProfilePopup from "./EditProfilePopup";
+import AddPlacePopup from "./AddPlacePopup";
 import ImagePopup from "./ImagePopup";
 import React, { useState, useEffect } from "react";
 import api from "../utils/api.js";
@@ -156,37 +157,15 @@ function App() {
           onUpdateUser={handleUpdateUser}
         ></EditProfilePopup>
 
-        <PopupWithForm
+        <AddPlacePopup
           name="cards"
           buttonText="Создать"
           titleText="Новое место"
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
         >
-          <input
-            id="cardname-input"
-            className="popup__input popup__input_cardname"
-            type="text"
-            name="name"
-            placeholder="Название"
-            minLength="2"
-            maxLength="30"
-            autoComplete="off"
-            required
-          />
-          <span className="cardname-input-error popup__input-error"></span>
 
-          <input
-            id="link-input"
-            className="popup__input popup__input_link"
-            type="url"
-            name="link"
-            placeholder="Ссылка на картинку"
-            autoComplete="off"
-            required
-          />
-          <span className="link-input-error popup__input-error"></span>
-        </PopupWithForm>
+        </AddPlacePopup>
 
         <PopupWithForm
           name="confirmation"
