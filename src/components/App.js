@@ -30,7 +30,7 @@ function App() {
   };
 
   const closeAllPopups = () => {
-    setIsEditAvatarPopupOpen(false) ||
+      setIsEditAvatarPopupOpen(false) ||
       setIsEditProfilePopupOpen(false) ||
       setIsAddPlacePopupOpen(false) ||
       setIsImagePopupOpen(false);

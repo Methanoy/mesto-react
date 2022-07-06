@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import { React, useState, useEffect, useContext, useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
 import { CurrentUserContext } from "./contexts/CurrentUserContext";
 
@@ -6,6 +6,8 @@ function AddPlacePopup(props) {
   const currentUser = useContext(CurrentUserContext);
   const [link, setLink] = useState("");
   const [caption, setCaption] = useState("");
+  const linkRef = useRef("");
+  const captionRef = useRef("");
 
   function handleAddLink(evt) {
     setLink(evt.target.value);
@@ -15,9 +17,14 @@ function AddPlacePopup(props) {
     setCaption(evt.target.value);
   }
 
+  useEffect(() => {
+    captionRef.current.value = "";
+    linkRef.current.value = "";
+  }, [props.isOpen]);
+
   function handleSubmit(evt) {
     evt.preventDefault();
-    
+
     props.onAddPlace({
       name: caption,
       link,
@@ -47,8 +54,8 @@ function AddPlacePopup(props) {
         minLength="2"
         maxLength="30"
         autoComplete="off"
-        value={caption || ""}
         onChange={handleAddCaption}
+        ref={captionRef || ""}
         required
       />
       <span className="cardname-input-error popup__input-error"></span>
@@ -59,8 +66,8 @@ function AddPlacePopup(props) {
         name="link"
         placeholder="Ссылка на картинку"
         autoComplete="off"
-        value={link || ""}
         onChange={handleAddLink}
+        ref={linkRef || ""}
         required
       />
       <span className="link-input-error popup__input-error"></span>
