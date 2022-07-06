@@ -4,29 +4,29 @@ import { CurrentUserContext } from "./contexts/CurrentUserContext";
 
 function AddPlacePopup(props) {
   const currentUser = useContext(CurrentUserContext);
-  const [cards, setCards] = useState("");
-  const [description, setDescription] = useState("");
+  const [link, setLink] = useState("");
+  const [caption, setCaption] = useState("");
 
-  function handleAddCard(e) {
-    setCards(e.target.value);
+  function handleAddLink(evt) {
+    setLink(evt.target.value);
   }
 
-  function handleChangeDescription(evt) {
-    setDescription(evt.target.value);
+  function handleAddCaption(evt) {
+    setCaption(evt.target.value);
   }
 
   function handleSubmit(evt) {
     evt.preventDefault();
-
-    props.onUpdateUser({
-      name,
-      about: description,
+    
+    props.onAddPlace({
+      name: caption,
+      link,
     });
   }
 
   useEffect(() => {
-    setName(currentUser.name);
-    setDescription(currentUser.about);
+    setCaption(currentUser.caption);
+    setLink(currentUser.link);
   }, [currentUser]);
 
   return (
@@ -34,18 +34,21 @@ function AddPlacePopup(props) {
       name="cards"
       buttonText="Создать"
       titleText="Новое место"
-      isOpen={isAddPlacePopupOpen}
-      onClose={closeAllPopups}
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+      onSubmit={handleSubmit}
     >
       <input
         id="cardname-input"
         className="popup__input popup__input_cardname"
         type="text"
-        name="name"
+        name="caption"
         placeholder="Название"
         minLength="2"
         maxLength="30"
         autoComplete="off"
+        value={caption || ""}
+        onChange={handleAddCaption}
         required
       />
       <span className="cardname-input-error popup__input-error"></span>
@@ -56,6 +59,8 @@ function AddPlacePopup(props) {
         name="link"
         placeholder="Ссылка на картинку"
         autoComplete="off"
+        value={link || ""}
+        onChange={handleAddLink}
         required
       />
       <span className="link-input-error popup__input-error"></span>
@@ -63,4 +68,4 @@ function AddPlacePopup(props) {
   );
 }
 
-export default AddPlacePopupPopup;
+export default AddPlacePopup;

@@ -12,16 +12,13 @@ import { CurrentUserContext } from "./contexts/CurrentUserContext";
 import EditAvatarPopup from "./EditAvatarPopup";
 
 function App() {
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    useState(false);
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [selectedCard, setIsSelectedCard] = useState({});
   const [currentUser, setIsCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
-
 
   const handleEditAvatarClick = () => setIsEditAvatarPopupOpen(true);
   const handleEditProfileClick = () => setIsEditProfilePopupOpen(true);
@@ -48,6 +45,18 @@ function App() {
       })
       .catch((err) =>
         console.log(`Ошибка при редактировании данных пользователя: ${err}`)
+      );
+  }
+
+  function handleAddPlaceSubmit(data) {
+    api
+      .addNewCard(data)
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
+        closeAllPopups();
+      })
+      .catch((err) =>
+        console.log(`Ошибка при добавлении новой карточки: ${err}`)
       );
   }
 
@@ -163,9 +172,8 @@ function App() {
           titleText="Новое место"
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
-        >
-
-        </AddPlacePopup>
+          onAddPlace={handleAddPlaceSubmit}
+        ></AddPlacePopup>
 
         <PopupWithForm
           name="confirmation"
