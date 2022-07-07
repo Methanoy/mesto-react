@@ -39,7 +39,7 @@ function AddPlacePopup(props) {
   return (
     <PopupWithForm
       name="cards"
-      buttonText="Создать"
+      buttonText={props.onCreate}
       titleText="Новое место"
       isOpen={props.isOpen}
       onClose={props.onClose}

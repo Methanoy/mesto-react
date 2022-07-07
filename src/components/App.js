@@ -19,6 +19,8 @@ function App() {
   const [selectedCard, setIsSelectedCard] = useState({});
   const [currentUser, setIsCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [showSavingText, setIsShowSavingText] = useState("Сохранить");
+  const [showCreatingText, setIsShowCreatingText] = useState("Создать");
 
   const handleEditAvatarClick = () => setIsEditAvatarPopupOpen(true);
   const handleEditProfileClick = () => setIsEditProfilePopupOpen(true);
@@ -30,13 +32,14 @@ function App() {
   };
 
   const closeAllPopups = () => {
-      setIsEditAvatarPopupOpen(false) ||
+    setIsEditAvatarPopupOpen(false) ||
       setIsEditProfilePopupOpen(false) ||
       setIsAddPlacePopupOpen(false) ||
       setIsImagePopupOpen(false);
   };
 
   function handleUpdateUser(data) {
+    setIsShowSavingText("Сохранение...");
     api
       .editUserInfo(data)
       .then((userData) => {
@@ -45,10 +48,12 @@ function App() {
       })
       .catch((err) =>
         console.log(`Ошибка при редактировании данных пользователя: ${err}`)
-      );
+      )
+      .finally(() => setIsShowSavingText("Сохранить"));
   }
 
   function handleAddPlaceSubmit(data) {
+    setIsShowCreatingText("Создаём...");
     api
       .addNewCard(data)
       .then((newCard) => {
@@ -57,10 +62,12 @@ function App() {
       })
       .catch((err) =>
         console.log(`Ошибка при добавлении новой карточки: ${err}`)
-      );
+      )
+      .finally(() => setIsShowCreatingText("Создать"));
   }
 
   function handleUpdateAvatar(data) {
+    setIsShowSavingText("Сохранение...");
     api
       .editUserAvatar(data)
       .then((userData) => {
@@ -69,7 +76,8 @@ function App() {
       })
       .catch((err) =>
         console.log(`Ошибка при редактировании данных аватара: ${err}`)
-      );
+      )
+      .finally(() => setIsShowSavingText("Сохранить"));
   }
 
   function handleCardLike(card) {
@@ -158,12 +166,14 @@ function App() {
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
+          onSave={showSavingText}
         ></EditAvatarPopup>
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
+          onSave={showSavingText}
         ></EditProfilePopup>
 
         <AddPlacePopup
@@ -173,6 +183,7 @@ function App() {
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
+          onCreate={showCreatingText}
         ></AddPlacePopup>
 
         <PopupWithForm
