@@ -1,21 +1,9 @@
-import { React, useState, useEffect, useContext, useRef } from "react";
+import { React, useEffect, useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
-import { CurrentUserContext } from "./contexts/CurrentUserContext";
 
 function AddPlacePopup(props) {
-  const currentUser = useContext(CurrentUserContext);
-  const [link, setLink] = useState("");
-  const [caption, setCaption] = useState("");
   const linkRef = useRef("");
   const captionRef = useRef("");
-
-  function handleAddLink(evt) {
-    setLink(evt.target.value);
-  }
-
-  function handleAddCaption(evt) {
-    setCaption(evt.target.value);
-  }
 
   useEffect(() => {
     captionRef.current.value = "";
@@ -26,20 +14,15 @@ function AddPlacePopup(props) {
     evt.preventDefault();
 
     props.onAddPlace({
-      name: caption,
-      link,
+      name: captionRef.current.value,
+      link: linkRef.current.value,
     });
   }
-
-  useEffect(() => {
-    setCaption(currentUser.caption);
-    setLink(currentUser.link);
-  }, [currentUser]);
 
   return (
     <PopupWithForm
       name="cards"
-      buttonText={props.onCreate}
+      buttonText={props.textOnCreateBtn}
       titleText="Новое место"
       isOpen={props.isOpen}
       onClose={props.onClose}
@@ -54,7 +37,6 @@ function AddPlacePopup(props) {
         minLength="2"
         maxLength="30"
         autoComplete="off"
-        onChange={handleAddCaption}
         ref={captionRef || ""}
         required
       />
@@ -66,7 +48,6 @@ function AddPlacePopup(props) {
         name="link"
         placeholder="Ссылка на картинку"
         autoComplete="off"
-        onChange={handleAddLink}
         ref={linkRef || ""}
         required
       />

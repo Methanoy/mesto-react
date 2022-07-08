@@ -2,7 +2,7 @@ import "../index.css";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-import PopupWithForm from "./PopupWithForm";
+import ConfirmationPopup from "./ConfirmationPopup";
 import EditProfilePopup from "./EditProfilePopup";
 import AddPlacePopup from "./AddPlacePopup";
 import ImagePopup from "./ImagePopup";
@@ -16,15 +16,29 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+
+  const [deleteCardWithConfirm, setDeleteCardWithConfirm] = useState({
+    isOpen: false,
+    card: {},
+  });
   const [selectedCard, setIsSelectedCard] = useState({});
   const [currentUser, setIsCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+
   const [showSavingText, setIsShowSavingText] = useState("Сохранить");
   const [showCreatingText, setIsShowCreatingText] = useState("Создать");
+  const [showDeletingText, setIsShowDeletingText] = useState("Да");
 
   const handleEditAvatarClick = () => setIsEditAvatarPopupOpen(true);
   const handleEditProfileClick = () => setIsEditProfilePopupOpen(true);
   const handleAddPlaceClick = () => setIsAddPlacePopupOpen(true);
+
+  const handleDeleteCardClick = (card) =>
+    setDeleteCardWithConfirm({
+      ...deleteCardWithConfirm,
+      isOpen: true,
+      card: card,
+    });
 
   const handleCardClick = (card) => {
     setIsSelectedCard(card);
@@ -35,7 +49,8 @@ function App() {
     setIsEditAvatarPopupOpen(false) ||
       setIsEditProfilePopupOpen(false) ||
       setIsAddPlacePopupOpen(false) ||
-      setIsImagePopupOpen(false);
+      setIsImagePopupOpen(false) ||
+      setDeleteCardWithConfirm({ ...deleteCardWithConfirm, isOpen: false });
   };
 
   function handleUpdateUser(data) {
@@ -89,11 +104,17 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    api.deleteCard(card._id).then((delCard) => {
-      setCards((state) =>
-        state.filter((c) => (c._id === card._id ? !delCard : c))
-      );
-    });
+    setIsShowDeletingText("Удаляем...");
+    api
+      .deleteCard(card._id)
+      .then((delCard) => {
+        setCards((state) =>
+          state.filter((c) => (c._id === card._id ? !delCard : c))
+        );
+        closeAllPopups();
+      })
+      .catch((err) => console.log(`Ошибка при удалении карточки: ${err}`))
+      .finally(() => setIsShowDeletingText("Да"));
   }
 
   useEffect(() => {
@@ -154,7 +175,7 @@ function App() {
           onCardClick={handleCardClick}
           cards={cards}
           onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
+          onCardDelete={handleDeleteCardClick}
         />
         <Footer />
         <ImagePopup
@@ -166,30 +187,28 @@ function App() {
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
-          onSave={showSavingText}
-        ></EditAvatarPopup>
+          textOnSaveBtn={showSavingText}
+        />
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
-          onSave={showSavingText}
-        ></EditProfilePopup>
+          textOnSaveBtn={showSavingText}
+        />
 
         <AddPlacePopup
-          name="cards"
-          buttonText="Создать"
-          titleText="Новое место"
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
-          onCreate={showCreatingText}
-        ></AddPlacePopup>
+          textOnCreateBtn={showCreatingText}
+        />
 
-        <PopupWithForm
-          name="confirmation"
-          buttonText="Да"
-          titleText="Вы уверены?"
+        <ConfirmationPopup
+          deleteCardInfo={deleteCardWithConfirm}
+          onClose={closeAllPopups}
+          onDelete={handleCardDelete}
+          textOnDeleteBtn={showDeletingText}
         />
       </div>
     </CurrentUserContext.Provider>
