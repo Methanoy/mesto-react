@@ -2,8 +2,8 @@ import { React, useEffect, useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 function AddPlacePopup(props) {
-  const linkRef = useRef("");
-  const captionRef = useRef("");
+  const linkRef = useRef(null);
+  const captionRef = useRef(null);
 
   useEffect(() => {
     captionRef.current.value = "";
