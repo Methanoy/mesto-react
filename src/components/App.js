@@ -100,7 +100,10 @@ function App() {
 
     api.changeCardLikeStatus(card._id, !isLiked).then((newCard) => {
       setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
-    });
+    })
+    .catch((err) =>
+    console.log(`Ошибка при редактировании данных лайка: ${err}`)
+  )
   }
 
   function handleCardDelete(card) {
@@ -128,7 +131,7 @@ function App() {
           `Ошибка при получении первоначальных данных карточек с сервера: ${err}`
         )
       );
-  }, []);
+  },[]);
 
   useEffect(() => {
     api
@@ -141,7 +144,7 @@ function App() {
           `Ошибка при получении первоначальных данных пользователя с сервера: ${err}`
         )
       );
-  }, []);
+  },[]);
 
   useEffect(() => {
     function handleEscClose(evt) {
@@ -151,7 +154,7 @@ function App() {
     }
     document.addEventListener("keydown", handleEscClose);
     return () => document.removeEventListener("keydown", handleEscClose);
-  }, []);
+  });
 
   useEffect(() => {
     function handleOutsideClickClose(evt) {
@@ -162,7 +165,7 @@ function App() {
     document.addEventListener("mousedown", handleOutsideClickClose);
     return () =>
       document.removeEventListener("mousedown", handleOutsideClickClose);
-  }, []);
+  });
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
