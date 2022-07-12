@@ -146,27 +146,6 @@ function App() {
       );
   },[]);
 
-  useEffect(() => {
-    function handleEscClose(evt) {
-      if (evt.key === "Escape") {
-        closeAllPopups();
-      }
-    }
-    document.addEventListener("keydown", handleEscClose);
-    return () => document.removeEventListener("keydown", handleEscClose);
-  });
-
-  useEffect(() => {
-    function handleOutsideClickClose(evt) {
-      if (evt.target.classList.contains("popup_opened")) {
-        closeAllPopups();
-      }
-    }
-    document.addEventListener("mousedown", handleOutsideClickClose);
-    return () =>
-      document.removeEventListener("mousedown", handleOutsideClickClose);
-  });
-
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
