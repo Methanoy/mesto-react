@@ -1,5 +1,7 @@
 <h1 align="center">Добро пожаловать на страницу проекта Mesto</h1>
 
+## Ссылка на GitHub Pages
+[Проект на GitHub Pages](https://methanoy.github.io/mesto-react/)
 ## Описание
 
 <h2 align="center"><img src="./src/images/readme__header.jpg" width="100%"></h2>
@@ -24,6 +26,4 @@
 - Работа с макетом в Figma.
 - React c использованием хуков.
 ## Планы
-- Добавить функционал добавления и удаления фото, лайка карточки, редактирования данных пользователя.
-## Ссылка на GitHub Pages
-[Проект на GitHub Pages](https://methanoy.github.io/mesto-react/)
+- Добавить функционал валидации.
