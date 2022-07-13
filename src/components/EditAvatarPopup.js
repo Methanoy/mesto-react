@@ -1,6 +1,6 @@
 import { React, useEffect, useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
-import useEvent from "../utils/hooks";
+import { useEscKeydown, useOutsideClick } from "../utils/hooks";
 
 function EditAvatarPopup(props) {
   const avatarRef = useRef(null);
@@ -17,29 +17,8 @@ function EditAvatarPopup(props) {
     avatarRef.current.value = "";
   }, [props.isOpen]);
 
-  /*
-  useEffect(() => {
-    function handleEscClose(evt) {
-      if (evt.key === "Escape") {
-        props.onClose();
-      }
-    }
-    document.addEventListener("keydown", handleEscClose);
-    return () => document.removeEventListener("keydown", handleEscClose);
-  });
-  */
- useEvent(props.onClose);
- 
-  useEffect(() => {
-    function handleOutsideClickClose(evt) {
-      if (evt.target.classList.contains("popup_opened")) {
-        props.onClose();
-      }
-    }
-    document.addEventListener("mousedown", handleOutsideClickClose);
-    return () =>
-      document.removeEventListener("mousedown", handleOutsideClickClose);
-  });
+  useEscKeydown(props.onClose);
+  useOutsideClick(props.onClose);
 
   return (
     <PopupWithForm

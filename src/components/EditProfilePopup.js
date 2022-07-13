@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import PopupWithForm from "./PopupWithForm";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import { useEscKeydown, useOutsideClick } from "../utils/hooks";
 
 function EditProfilePopup(props) {
   const currentUser = useContext(CurrentUserContext);
@@ -29,26 +30,8 @@ function EditProfilePopup(props) {
     setDescription(currentUser.about);
   }, [currentUser, props.isOpen]);
 
-  useEffect(() => {
-    function handleEscClose(evt) {
-      if (evt.key === "Escape") {
-        props.onClose();
-      }
-    }
-    document.addEventListener("keydown", handleEscClose);
-    return () => document.removeEventListener("keydown", handleEscClose);
-  });
-
-  useEffect(() => {
-    function handleOutsideClickClose(evt) {
-      if (evt.target.classList.contains("popup_opened")) {
-        props.onClose();
-      }
-    }
-    document.addEventListener("mousedown", handleOutsideClickClose);
-    return () =>
-      document.removeEventListener("mousedown", handleOutsideClickClose);
-  });
+  useEscKeydown(props.onClose);
+  useOutsideClick(props.onClose);
 
   return (
     <PopupWithForm
