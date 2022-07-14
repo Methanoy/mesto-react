@@ -1,4 +1,10 @@
+import { useEscKeydown, useOutsideClick } from "../utils/hooks";
+
 function PopupWithForm(props) {
+  
+  useEscKeydown(props.onClose);
+  useOutsideClick(props.onClose);
+
   return (
     <div
       className={`popup popup_${props.name} ${props.isOpen && "popup_opened"}`}

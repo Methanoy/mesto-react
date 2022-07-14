@@ -1,6 +1,5 @@
 import { React } from "react";
 import PopupWithForm from "./PopupWithForm";
-import { useEscKeydown, useOutsideClick } from "../utils/hooks";
 
 function ConfirmationPopup({
   deleteCardInfo: { isOpen, card },
@@ -12,9 +11,6 @@ function ConfirmationPopup({
     evt.preventDefault();
     onDelete(card);
   }
-
-  useEscKeydown(onClose);
-  useOutsideClick(onClose);
 
   return (
     <PopupWithForm

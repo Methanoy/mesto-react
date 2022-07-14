@@ -1,6 +1,5 @@
 import { React, useEffect, useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
-import { useEscKeydown, useOutsideClick } from "../utils/hooks";
 
 function AddPlacePopup(props) {
   const linkRef = useRef(null);
@@ -19,9 +18,6 @@ function AddPlacePopup(props) {
       link: linkRef.current.value,
     });
   }
-
-  useEscKeydown(props.onClose);
-  useOutsideClick(props.onClose);
 
   return (
     <PopupWithForm

@@ -1,6 +1,5 @@
 import { React, useEffect, useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
-import { useEscKeydown, useOutsideClick } from "../utils/hooks";
 
 function EditAvatarPopup(props) {
   const avatarRef = useRef(null);
@@ -16,9 +15,6 @@ function EditAvatarPopup(props) {
   useEffect(() => {
     avatarRef.current.value = "";
   }, [props.isOpen]);
-
-  useEscKeydown(props.onClose);
-  useOutsideClick(props.onClose);
 
   return (
     <PopupWithForm
