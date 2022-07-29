@@ -24,27 +24,6 @@ function Card(props) {
     props.onCardDelete(props.card);
   }
 
-  useEffect(() => {
-    function handleEscClose(evt) {
-      if (evt.key === "Escape") {
-        props.onClose();
-      }
-    }
-    document.addEventListener("keydown", handleEscClose);
-    return () => document.removeEventListener("keydown", handleEscClose);
-  });
-
-  useEffect(() => {
-    function handleOutsideClickClose(evt) {
-      if (evt.target.classList.contains("popup_opened")) {
-        props.onClose();
-      }
-    }
-    document.addEventListener("mousedown", handleOutsideClickClose);
-    return () =>
-      document.removeEventListener("mousedown", handleOutsideClickClose);
-  });
-
   return (
     <li className="cards__element">
       <div className="card">
